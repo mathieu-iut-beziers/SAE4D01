@@ -1,0 +1,48 @@
+version: '2'
+
+services:
+  db:
+    image: mariadb:10.6
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=nextcloud
+      - MYSQL_PASSWORD=nextcloud
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    mac_address: 02:42:c0:a8:84:46
+    networks: 
+      x_vlan:
+        ipv4_address: 192.168.16.46
+
+  app:
+    image: nextcloud
+    restart: always
+    ports:
+      - 80:80
+    mac_address: 02:42:c0:a8:84:45
+    networks: 
+      x_vlan:
+        ipv4_address: 192.168.16.45
+    links:
+      - db
+    volumes:
+      - ./nextcloud:/var/www/html
+    environment:
+      - MYSQL_PASSWORD=
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_HOST=db
+      - trusted_domains=192.168.16.45
+networks:
+  x_vlan:
+    driver: macvlan
+    driver_opts:
+      parent: ens18
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.16.0/24
+          gateway: 192.168.16.99
