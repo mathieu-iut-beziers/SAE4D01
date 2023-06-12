@@ -35,7 +35,7 @@ services:
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
       - MYSQL_HOST=db
-      - trusted_domains=192.168.16.45
+      - trusted_domains="nextcloud.g1.com"
 networks:
   x_vlan:
     driver: macvlan
