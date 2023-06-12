@@ -1,0 +1,45 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: iut
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: iut
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    ports:
+      - "80:80"
+    restart: always
+    mac_address: 02:42:c0:a8:84:49
+    networks:
+      x_vlan:
+        ipv4_address: 192.168.16.49
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: iut
+      WORDPRESS_DB_NAME: wordpress
+volumes:
+  db_data:
+
+networks:
+  x_vlan:
+    driver: macvlan
+    driver_opts:
+      parent: ens18
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.16.0/24
+          gateway: 192.168.16.99
