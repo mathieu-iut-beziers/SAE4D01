@@ -1,0 +1,24 @@
+version: "3"
+services:
+    portainer:
+        image: 'portainer/portainer-ce:latest'
+        restart: always
+        volumes:
+            - ./docker.sock:/var/run/docker.sock
+            - ./portainer_data:/data
+        ports:
+            - "9443:9443"
+        mac_address: 02:42:c0:a8:84:40
+        networks: 
+          x_vlan:
+            ipv4_address: 192.168.16.40
+networks:
+  x_vlan:
+    driver: macvlan
+    driver_opts:
+      parent: ens18
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.16.0/24
+          gateway: 192.168.16.99
