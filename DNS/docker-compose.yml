@@ -5,19 +5,23 @@ services:
     image: "mvance/unbound:latest"
     expose:
       - "53"
-    network_mode: bridge
-    ports:
-     - "53:53/udp"
-     - "53:53/tcp"
     mac_address: 02:42:c0:a8:84:41
     networks:
       x_vlan:
         ipv4_address: 192.168.16.41
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
     volumes:
-      - ./my_conf/forward-records.conf:/opt/unbound/etc/unbound/forward-records.conf
-      - ./my_conf/a-records.conf:/opt/unbound/etc/unbound/a-records.conf
+      - type: bind
+        read_only: true
+        source: ./forward-records.conf
+        target: /opt/unbound/etc/unbound/forward-records.conf
+      - type: bind
+        read_only: true
+        source: ./a-records.conf
+        target: /opt/unbound/etc/unbound/a-records.conf
     restart: unless-stopped
-
 networks:
   x_vlan:
     driver: macvlan
