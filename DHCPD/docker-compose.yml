@@ -15,5 +15,5 @@ services:
     ports:
       - "67/udp"
     volumes:
-      - ./dhcpd:/data/dhcpd
+      - ./:/data/dhcpd
     restart: always

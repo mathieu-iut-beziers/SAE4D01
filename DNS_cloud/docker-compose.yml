@@ -15,6 +15,10 @@ services:
     volumes:
       - type: bind
         read_only: true
+        source: ./unbound.conf
+        target: /opt/unbound/etc/unbound/unbound.conf
+      - type: bind
+        read_only: true
         source: ./forward-records.conf
         target: /opt/unbound/etc/unbound/forward-records.conf
       - type: bind
