@@ -1,12 +1,6 @@
 # SAE DevCloud_d01 2023
 
-Vous venez de réussir le concours d'assistant d'ingénieur (bac +2) dans l'éducation nationale et vous venez d'être nommé dans un IUT du sud de la France celui de "Cette".
-Cet IUT vient d'ouvrir et donc tout est à mettre à place.
-Le directeur de l'IUT (Mr Pouchou) vous demande d'implémenter tous les services possibles de l'IUT sous forme **containairisée** majoritairement (l'usage d'une VM pour un service est possible, mais l'installation du logiciel devra se faire via Ansible), en haute disponibilité pour certains services et si possible avec de l'équilibrage de charge.
-
-Vous travaillerez au sein d'une équipe de 4 personnes imposée par le directeur de l'IUT.
-Vous devez travailler en mode agile en utilisant la méthode Kanban. Au final chaque tâche sera documentée et affectée à une personne ce qui permettra d'évaluer le travail de votre équipe et l'individualisation de votre rémunération.
-Le directeur fra au moins un point intermédiaire.
+Nous somme a l'IUT de Cette, cet IUT vient d'ouvrir et donc tout est à mettre à place. On nous demande d'implémenter tous les services possibles de l'IUT sous forme **containairisée**. Il faut mettre en place de la haute disponibilité pour certains services et si possible avec de l'équilibrage de charge.
 
 Vous devez donc implémenter à minima les services réseaux suivants:
 
