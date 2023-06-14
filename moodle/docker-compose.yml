@@ -10,8 +10,11 @@ services:
       - MARIADB_CHARACTER_SET=utf8mb4
       - MARIADB_COLLATE=utf8mb4_unicode_ci
     volumes:
-      - 'mariadb_data:/bitnami/mariadb'
-
+      - './mariadb_data:/bitnami/mariadb'
+    mac_address: 02:42:c0:a8:84:52
+    networks: 
+      x_vlan:
+        ipv4_address: 192.168.16.52
   moodle:
     image: docker.io/bitnami/moodle:4.2
     ports:
@@ -25,15 +28,21 @@ services:
       - MOODLE_DATABASE_NAME=bitnami_moodle
       - ALLOW_EMPTY_PASSWORD=yes
     volumes:
-      - 'moodle_data:/bitnami/moodle'
-      - 'moodledata_data:/bitnami/moodledata'
+      - './moodle_data:/bitnami/moodle'
+      - './moodledata_data:/bitnami/moodledata'
     depends_on:
       - mariadb
-
-volumes:
-  mariadb_data:
-    driver: local
-  moodle_data:
-    driver: local
-  moodledata_data:
-    driver: local
+    mac_address: 02:42:c0:a8:84:51
+    networks: 
+      x_vlan:
+        ipv4_address: 192.168.16.51
+networks:
+  x_vlan:
+    driver: macvlan
+    driver_opts:
+      parent: ens18
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.16.0/24
+          gateway: 192.168.16.99
