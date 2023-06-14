@@ -1,9 +1,5 @@
 # SAE DevCloud_d01 2023
 
-<link rel="stylesheet" type="text/css" href="style.css">
-
-</br></br></br></br></br></br></br></br></br></br></br>
-
 - Contexte
 - Presentation rapide de notre soulution
 - Notre infrastructure phyisique
@@ -12,8 +8,6 @@
 - Budgétisation
 - Gestion de proget
 - Conclusion
-
-<div style="page-break-after: always; visibility: hidden"></div>
 
 ## Contexte
 
@@ -43,8 +37,6 @@ Et les services applicatifs containairisés suivants à destination des usagers:
   
 Un stockage partagé NFS permettra de survivre à l'arrêt d'un serveur pour les containers redondés.
 
-<div style="page-break-after: always; visibility: hidden">\pagebreak</div>
-
 ## Presentation rapide de notre soulution
 
 Pour realiser l'infrastructure de l'iut nous avons choise une solution haute disponibilité base sur un cluster proxmox de trois serveur, un stockage partager NFS qui est presant sur un quatrieme server cette foie ci sur TrueNAS. Pour protege cette infrastructure nous avons fait le choix de prendre un firewall physique Stormshield.
@@ -57,13 +49,11 @@ Pour notre solution haute disponibilité, nous avons opté pour la virtualisatio
 
 Pour le stockage NFS, nous avons choisi TrueNAS. TrueNAS permet de transformer n'importe quel PC ou serveur en NAS de manière extrêmement simple et efficace. Il nous permet également de réaliser une déduplication sur les disques partagés, optimisant ainsi l'utilisation de l'espace de stockage disponible. De plus, nous avons pris la décision de crypter le contenu des disques afin de garantir la sécurité de nos données.
 
-<div style="page-break-after: always; visibility: hidden">\pagebreak</div>
-
 ## Notre infrastructure phyisique et logique
 
 ### Architecture physique
 
-Notre architecture est basé sur 4 server Dell R6515 qui comunique entre eux via un switch 10 Gbs, le reseau est lui assuer par notre firewall SN210W.
+Notre architecture est basé sur 4 server Dell R6515 qui comunique entre eux via un lien 10 Gbps, le reseau est lui assuré par notre firewall SN210W qui dispose d'un lien 1Gbps.
 
 > Du au limitation de la salle, et pour assurer les meilleur performance pour les migrations et la HA les serveur sont donc sur le switch 10 Gbs de la salle et notre reseaux interne sur notre switch 1 Gbs.
 
@@ -120,21 +110,43 @@ Voici les IPs des diferent services :
 
 ![img](img/3.png)
 
+Nous avons choisi la solution de virtualisation Proxmox pour mettre en place notre cluster composé de 3 nœuds (Whiteness, NODE01 et NODE021). Cette solution open-source nous a permis de gagner un temps considérable dans sa configuration.
+
 ### PBS
 
 ![img](img/2.png)
+
+Proxmox Backup Server (PBS) est une solution de sauvegarde d'entreprise conçue pour sauvegarder et restaurer des machines virtuelles, des conteneurs et des hôtes physiques.
+
+Cette solution présente l'avantage majeur d'intégrer la déduplication, ce qui garantit des fréquences de sauvegarde relativement élevées (toutes les 30 minutes dans notre cas), tout en préservant un espace de stockage relativement restreint pour notre projet.
+
+Le principe de la déduplication est assez simple : il consiste à réutiliser des blocs déjà existants, identifiés par des index dans une snapshot. Cela permet de réduire considérablement l'espace occupé par les snapshots, théoriquement jusqu'à un facteur de 10,77.
 
 ### HA
 
 ![img](img/5.png)
 
+La haute disponibilité (HA) était un élément primordial pour notre infrastructure, car elle nous permet de garantir un temps de fonctionnement optimal pour nos microservices. Grâce à la HA, nous pouvons effectuer une migration en moins de 5 minutes en cas de perte d'un nœud et tolérer la perte de 2/3 des nœuds.
+
+Afin d'atteindre cet objectif de haute disponibilité, nous avons choisi d'utiliser un stockage partagé NFS, ce que nous avons effectivement mis en place. Nous aborderons ce sujet en détail plus tard.
+
 ### Stormshield SN210W
 
 ![img](img/6.png)
 
+Afin de sécuriser notre infrastructure et d'éviter les perturbations causées par d'autres groupes (serveur DHCP, doublons d'IP, etc.), nous avons choisi de mettre en place un réseau local (LAN) grâce à une solution de pare-feu fournie par Stormshield.
+
+Ce pare-feu se charge de gérer le serveur DHCP, la distribution des DNS et divers aspects de la sécurité, notamment l'isolation de notre LAN.
+
 ### TrueNAS
 
 ![img](img/4.png)
+
+La gestion de notre stockage a été confiée à un serveur fonctionnant sous TrueNAS. Nous avons choisi cette solution en raison de son caractère open-source ainsi que de sa réputation de fiabilité extrême.
+
+Pour optimiser l'utilisation de notre espace de stockage, nous avons décidé d'activer la déduplication sur notre NFS. Cela nous permettra une fois de plus d'atteindre un facteur théorique de 10,77.
+
+Nous avons également pris la décision de mettre en place le chiffrement des données, ce qui ajoute une couche de sécurité réelle à notre infrastructure.
 
 ## Nos service mis en place
 
@@ -228,7 +240,9 @@ networks:                                         # Configuration réseau
           gateway: 192.168.16.99  # Adresse de la passerelle
 ```
 
-Unbound utilise un fichier de configuration appelé `a-records.conf` pour son fonctionnement, dans lequel nous avons implémenté nos services. Voici un extrait du fichier :
+Unbound utilise un fichier de configuration appelé `a-records.conf` pour son fonctionnement, dans lequel nous avons implémenté nos services.
+
+Voici un extrait du fichier :
 
 ```a-records
 # A Record
@@ -570,8 +584,6 @@ Voici le guide d'installation que nous avons suivi : `scodoc.org/GuideInstallDeb
 
 Le protocole FTP (File Transfer Protocol) est un protocole utilisé pour le transfert de fichiers entre un client et un serveur sur un réseau. Il nous permet d'envoyer, de récupérer et de gérer des fichiers sur un serveur distant que je vais devoir créer sous forme containerisée.
 
-#### Fichier de configuration
-
 Voici le “docker-compose.yaml” qui va mettre en place un serveur FTP
 
 ```yaml
@@ -618,7 +630,7 @@ Ce fichier Docker Compose définit un service pour exécuter un serveur FTP en u
 - Pour persister les données du serveur FTP, on monte un volume. Le dossier local ./data est monté dans le répertoire /home/ftpusers du conteneur.
 - On définit des variables d'environnement pour configurer le nom d'utilisateur, le mot de passe et le répertoire de base du serveur FTP.
 - On configure le service de façon à redémarrer automatiquement en cas d'échec.
-- Enfin, on définit une configuration pour le réseau x_vlan. Il utilise le pilote macvlan et spécifie ens18 comme interface parente. De plus, on va définir une plage d'adresses IP pour le réseau, avec une adresse de sous-réseau 192.168.16.0/24 et une passerelle 192.168.16.99. 
+- Enfin, on définit une configuration pour le réseau x_vlan. Il utilise le pilote macvlan et spécifie ens18 comme interface parente. De plus, on va définir une plage d'adresses IP pour le réseau, avec une adresse de sous-réseau 192.168.16.0/24 et une passerelle 192.168.16.99.
 
 En résumé, ce fichier Docker Compose crée un conteneur de serveur FTP utilisant
 l'image `stilliard/pure-ftpd`, expose les ports nécessaires, configure un réseau
@@ -634,7 +646,7 @@ Pour vérifier le bon fonctionnement de mon serveur FTP :
 
 Moodle est une plateforme d'apprentissage en ligne open source et gratuite. Le nom "Moodle" est l'acronyme de "Modular Object-Oriented Dynamic Learning Environment” (environnement d'apprentissage dynamique, modulaire et orienté objet). Le but est maintenant de créer un serveur Moodle conteneurisé. Après avoir installé tous les paquets nécessaires (docker, docker-compose...) pour créer mon container, je passe au fichier de configuration.
 
-#### Fichier de configuration
+#### Fichier de  configuration
 
 Voici le “docker-compose.yaml” qui va mettre en place un serveur Moodle sur une Vm Fedora.
 
@@ -684,13 +696,13 @@ Voici ce que fait ce Docker Compose :
 
 Ce fichier Docker Compose déploie deux services : mariadb et moodle.
 
-1. Service mariadb :
+#### Service mariadb
 
 - On utilise l'image bitnami/mariadb:10.6 pour exécuter une base de données MariaDB.
 - On utilise les variables d'environnement pour configurer la base de données. Par exemple, ALLOW_EMPTY_PASSWORD est défini sur "yes" pour autoriser une connexion sans mot de passe.
 - On utilise un volume nommé mariadb_data pour stocker les données persistantes de la base de données MariaDB.
 
-2. Service moodle :
+#### Service moodle
 
 - On utilise l'image bitnami/moodle:4.2 pour exécuter une instance de Moodle.
 
@@ -707,12 +719,11 @@ En résumé, ce Docker Compose déploie une base de données MariaDB et une inst
 
 #### Vérification
 
-Pour vérifier que mon serveur marche, j’ouvre le navigateur et j’autorise l’adresse http://moodle.g1.com/my/ , cela me dirige vers la page d’accueil de Moodle.
+Pour vérifier que mon serveur marche, j’ouvre le navigateur et j’autorise l’adresse `http://moodle.g1.com/my/` , cela me dirige vers la page d’accueil de Moodle.
 
 ![img](img/17.png)
 
 ### Harbor
-
 
 Nous avons decidé d'utiliser des VM fedoras de part leur petite taille et leur efficacité.
 
@@ -781,11 +792,26 @@ docker pull harbor.g1.com/library/nginx
 
 ![img](./img/arborpull.png)
 
-### Samba
-
 ### Active directory
 
+Nous avons décidé de mettre en place un AD avec un WUDS afin de simplifier la gestions des différentes clients que ce soit d'un point de vu sécurité, gestion utilisateurs, mises a jours et permissions.
+
+La mise a jour d'un WUDS sur le serveur de l'AD nous permet de reduire la charge sur la bande passante de notre réseau en centralisant les mises a jours a partir de notre AD.
+
+Afin de simplifier la gestion des mots de passes nous avions décidé de mettre en place un GPO désactivant les prériquis de sécurité (ce qui n'est bien évidement pas a faire dans un enviromenent de production).
+
+### Samba
+
+Afin de profiter pleinement de notre environement AD nous avons décider d'utiliser le partage de fichier natif a partir de notre serveur Windows afin de pouvoir gérer toutes les permission lié a celui-ci simplement et efficasement.
+
 ### Client windows
+
+Les clients windows sont des VM tourant sur Windows 11 (Afin de vérifier la possibilité d'installation sur VM), c'est clients sont tous lié à notre serveur AD qui se charge égalment de centraliser les dossier tel-que :
+
+- Documents
+- Images
+- Objets 3D
+- Etc...
 
 ## Fonctionement
 
