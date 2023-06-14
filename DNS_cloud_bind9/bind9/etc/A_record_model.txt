@@ -1,0 +1,14 @@
+;
+; BIND data file
+;
+$TTL	604800
+@	IN	SOA	rt.sae401.bz. root.rt.sae401.bz. (
+			      2		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	rt.sae401.bz.
+@	IN	A	10.205.9.3
+@   IN  PTR rt.sae402.bz.

@@ -1,0 +1,22 @@
+version: '3'
+services:
+  haproxy:
+    image: haproxy:latest
+    ports:
+      - 80:80
+    mac_address: 02:42:c0:a8:84:60
+    networks:
+      x_vlan:
+        ipv4_address: 192.168.16.60
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+networks:
+  x_vlan:
+    driver: macvlan
+    driver_opts:
+      parent: ens18
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.16.0/24
+          gateway: 192.168.16.99

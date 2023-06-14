@@ -1,0 +1,43 @@
+version: "3.2"
+services:
+  mariadb:
+    image: mariadb:10.7
+    container_name: mariadb
+    hostname: mariadb
+    volumes:
+      - ./mysql:/var/lib/mysql
+    mac_address: 02:42:c0:a8:84:51
+    networks:
+      x_vlan:
+        ipv4_address: 192.168.16.51
+    environment:
+      - MARIADB_ROOT_PASSWORD=diouxx
+      - MARIADB_DATABASE=glpidb
+      - MARIADB_USER=glpi_user
+      - MARIADB_PASSWORD=glpi
+    restart: always
+  glpi:
+    image: diouxx/glpi
+    container_name : glpi
+    hostname: glpi
+    ports:
+      - "80:80"
+    mac_address: 02:42:c0:a8:84:50
+    networks:
+      x_vlan:
+        ipv4_address: 192.168.16.50
+    volumes:
+      - ./www/html/glpi/:/var/www/html/glpi
+    environment:
+      - TIMEZONE=Europe/Paris
+    restart: always
+networks:
+  x_vlan:
+    driver: macvlan
+    driver_opts:
+      parent: ens18
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.16.0/24
+          gateway: 192.168.16.99

@@ -1,0 +1,150 @@
+zone "whiteness.g1.com." {
+        type master;
+        file "/etc/bind/db.whiteness.g1.com.";
+    };
+
+zone "1.16.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.whiteness.g1.com.";
+    };
+
+zone "prox1.g1.com." {
+        type master;
+        file "/etc/bind/db.prox1.g1.com.";
+    };
+
+zone "2.16.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.prox1.g1.com.";
+    };
+
+zone "prox2.g1.com." {
+        type master;
+        file "/etc/bind/db.prox2.g1.com.";
+    };
+
+zone "3.16.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.prox2.g1.com.";
+    };
+
+zone "ad.g1.com." {
+        type master;
+        file "/etc/bind/db.ad.g1.com.";
+    };
+
+zone "10.16.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.ad.g1.com.";
+    };
+
+zone "pbs.g1.com." {
+        type master;
+        file "/etc/bind/db.pbs.g1.com.";
+    };
+
+zone "4.16.202.10.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.pbs.g1.com.";
+    };
+
+zone "portainer.g1.com." {
+        type master;
+        file "/etc/bind/db.portainer.g1.com.";
+    };
+
+zone "40.16.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.portainer.g1.com.";
+    };
+
+zone "gitlab.g1.com." {
+        type master;
+        file "/etc/bind/db.gitlab.g1.com.";
+    };
+
+zone "44.16.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.gitlab.g1.com.";
+    };
+
+zone "nextcloud.g1.com." {
+        type master;
+        file "/etc/bind/db.nextcloud.g1.com.";
+    };
+
+zone "45.16.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.nextcloud.g1.com.";
+    };
+
+zone "ftb.g1.com." {
+        type master;
+        file "/etc/bind/db.ftb.g1.com.";
+    };
+
+zone "47.16.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.ftb.g1.com.";
+    };
+
+zone "snipeit.g1.com." {
+        type master;
+        file "/etc/bind/db.snipeit.g1.com.";
+    };
+
+zone "48.16.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.snipeit.g1.com.";
+    };
+
+zone "glpi.g1.com." {
+        type master;
+        file "/etc/bind/db.glpi.g1.com.";
+    };
+
+zone "50.16.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.glpi.g1.com.";
+    };
+
+zone "wordpress.g1.com." {
+        type master;
+        file "/etc/bind/db.wordpress.g1.com.";
+    };
+
+zone "60.16.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.wordpress.g1.com.";
+    };
+
+zone "harbor.g1.com." {
+        type master;
+        file "/etc/bind/db.harbor.g1.com.";
+    };
+
+zone "122.16.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.harbor.g1.com.";
+    };
+
+zone "moodle.g1.com." {
+        type master;
+        file "/etc/bind/db.moodle.g1.com.";
+    };
+
+zone "126.16.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.moodle.g1.com.";
+    };
+
+zone "scodoc.g1.com." {
+        type master;
+        file "/etc/bind/db.scodoc.g1.com.";
+    };
+
+zone "141.16.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.scodoc.g1.com.";
+    };
+

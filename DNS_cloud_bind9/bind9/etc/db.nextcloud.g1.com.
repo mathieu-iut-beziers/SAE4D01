@@ -1,0 +1,14 @@
+;
+; BIND data file
+;
+$TTL	604800
+@	IN	SOA	nextcloud.g1.com. root.nextcloud.g1.com. (
+			      2		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	nextcloud.g1.com.
+@	IN	A	192.168.16.45
+@   IN  PTR nextcloud.g1.com.
