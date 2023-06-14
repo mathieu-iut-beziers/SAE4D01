@@ -2,7 +2,7 @@
 
 - Contexte
 - Presentation rapide de notre soulution
-- Notre infrastructure phyisique
+- Notre infrastructure physique
 - Nos service mis en place
 - Fonctionement
 - Budgétisation
