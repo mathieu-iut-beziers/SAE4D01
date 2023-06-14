@@ -841,7 +841,9 @@ Les clients windows sont des VM tourant sur Windows 11 (Afin de vérifier la pos
 
 Pour montrer le bon fonctionement de toute l'infrastructure voici une video de demonstration depuis des poste windows installer (via un bureau a distance)
 
-![demo](./img/demo.webm)
+[Demo](./img/demo.webm)
+
+(Si le lien ne fonctionne pas cliquez [ici](https://github.com/mathieu-iut-beziers/SAE4D01/blob/main/img/demo.webm) )
 
 ## Budgétisation
 
