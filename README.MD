@@ -1,45 +1,45 @@
 # SAE DevCloud_d01 2023
 
 - Contexte
-- Presentation rapide de notre soulution
-- Notre infrastructure phyisique
-- Nos service mis en place
-- Fonctionement
+- Présentation rapide de notre solution
+- Notre infrastructure physique
+- Nos services mis en place
+- Fonctionnement
 - Budgétisation
-- Gestion de proget
+- Gestion de projet
 - Conclusion
 
 ## Contexte
 
-Nous somme a l'IUT de Cette, cet IUT vient d'ouvrir et donc tout est à mettre à place. On nous demande d'implémenter tous les services possibles de l'IUT sous forme **containairisée**. Il faut mettre en place de la haute disponibilité pour certains services et si possible avec de l'équilibrage de charge.
+Nous sommes à l'IUT de Cette, cet IUT vient d'ouvrir et donc tout est à mettre à place. On nous demande d'implémenter tous les services possibles de l'IUT sous forme **containérisée**. Il faut mettre en place de la haute disponibilité pour certains services et si possible avec de l'équilibrage de charge.
 
-Nous de devons metre en place ces procesus :
+Nous de devons mettre en place ces processus :
 
 - Un DNS en haute disponibilité (via IPVS).
   - Un DNS  (bind9). (qui sera dans le cloud)
   - Un DNS (unbound).
-- Un dhcp.
+- Un DHCP.
 - Un serveur FTP.
 - Au moins un client Windows connecté à un contrôleur de domaine Samba 3 ou 4.
-- Un service glpi d'inventaire. (Vos matériels y seront référencés)
+- Un service Glpi d'inventaire. (Vos matériels y seront référencés)
 - Un firewall (pfsense)
-- Une solution permettant de gérer les containers de façon centralisé (A l'exclusion d'un orchestrateur de container comme kubernetes) comme Portainer.
+- Une solution permettant de gérer les containers de façon centralisé (A l'exclusion d'un orchestrateur de container comme Kubernetes) comme Portainer.
 
-Et les services applicatifs containairisés suivants à destination des usagers:
+Et les services applicatifs containérisés suivants à destination des usagers:
 
 - Un serveur Gitlab qui vous servira de stockage de vos configurations.
 - Un serveur web IUT à base d'un "Content" Management System" comme celui de l'IUT de Béziers. HA proxy assurera l'équilibrage de charge et la haute disponibilité.
   Vous testerez en charge cette solution.
 - Un serveur de note Scodoc obligatoirement containérisé.
 - Un serveur Nextcloud.
-- Un serveur Samba. (le client Windows l'utilisera).
+- Un serveur Samba. (Le client Windows l'utilisera).
 - Un Kanban de votre choix internalisé ou externalisé.
   
 Un stockage partagé NFS permettra de survivre à l'arrêt d'un serveur pour les containers redondés.
 
-## Presentation rapide de notre soulution
+## Présentation rapide de notre solution
 
-Pour realiser l'infrastructure de l'iut nous avons choise une solution haute disponibilité base sur un cluster proxmox de trois serveur, un stockage partager NFS qui est presant sur un quatrieme server cette foie ci sur TrueNAS. Pour protege cette infrastructure nous avons fait le choix de prendre un firewall physique Stormshield.
+Pour réaliser l'infrastructure de l'IUT nous avons choisi une solution haute disponibilité base sur un cluster proxmox de trois serveur, un stockage partager NFS qui est présent sur un quatrième serveur cette foie ci sur TrueNAS. Pour protéger cette infrastructure nous avons fait le choix de prendre un firewall physique Stormshield.
 
 ### Explication de nos choix
 
@@ -49,23 +49,23 @@ Pour notre solution haute disponibilité, nous avons opté pour la virtualisatio
 
 Pour le stockage NFS, nous avons choisi TrueNAS. TrueNAS permet de transformer n'importe quel PC ou serveur en NAS de manière extrêmement simple et efficace. Il nous permet également de réaliser une déduplication sur les disques partagés, optimisant ainsi l'utilisation de l'espace de stockage disponible. De plus, nous avons pris la décision de crypter le contenu des disques afin de garantir la sécurité de nos données.
 
-## Notre infrastructure phyisique et logique
+## Notre infrastructure physique et logique
 
 ### Architecture physique
 
-Notre architecture est basé sur 4 server Dell R6515 qui comunique entre eux via un lien 10 Gbps, le reseau est lui assuré par notre firewall SN210W qui dispose d'un lien 1Gbps.
+Notre architecture est basé sur 4 server Dell R6515 qui communique entre eux via un lien 10 Gbps, le réseau est lui assuré par notre firewall SN210W qui dispose d'un lien 1Gbps.
 
-> Du au limitation de la salle, et pour assurer les meilleur performance pour les migrations et la HA les serveur sont donc sur le switch 10 Gbs de la salle et notre reseaux interne sur notre switch 1 Gbs.
+> Du au limitation de la salle, et pour assurer les meilleur performance pour les migrations et la HA les serveur sont donc sur le switch 10 Gbs de la salle et notre réseau interne sur notre switch 1 Gbs.
 
-Voici un schemat representatif de notre architecture physique :
+Voici un schéma représentatif de notre architecture physique :
 
 ![img](schemat/1archi-physique.drawio.svg)
 
 ### Notre architecture logique
 
-Notre architecture logique est donc une simplement constituer de deux reseaux, un pour tout les services mise en place et pour les utilisateur du reseau, et un second pour l'intercomunication des serveurs pour pouvoir profiter du switch 10 Gbs.
+Notre architecture logique est donc une simplement constituer de deux réseaux, un pour tout les services mise en place et pour les utilisateur du réseau, et un second pour l'intercommunication des serveurs pour pouvoir profiter du switch 10 Gbs.
 
-Voici un schemat representatif de notre architecture logique :
+Voici un schéma représentatif de notre architecture logique :
 
 ![img](schemat/1archi-logique.drawio.svg)
 
@@ -191,7 +191,7 @@ networks:                                         # Configuration réseau
 
 ![img](img/7.png)
 
-Nous avons choisit Portainer car c'est un  choix populaire pour la gestion des conteneurs Docker, il est simple et facile d'utilisation. Il offre une bonne interface graphique pour superviser, gérer et déployer des conteneurs Docker.
+Nous avons choisit Portainer car c'est un choix populaire pour la gestion des conteneurs Docker, il est simple et facile d'utilisation. Il offre une bonne interface graphique pour superviser, gérer et déployer des conteneurs Docker.
 
 ### DNS
 
@@ -313,7 +313,7 @@ moodle.g1.com.          3600    IN      A       192.168.16.126
 ;; MSG SIZE  rcvd: 58
 ```
 
-Le serveur DNS local est basé sur Bind9. Nous avons choisi une seconde technoligie de DNS en cas de decouverte de faille sur la premiere. C'est cette  raisons qui en fait notre DNS secondaire.
+Le serveur DNS local est basé sur Bind9. Nous avons choisi une seconde technologie de DNS en cas de découverte de faille sur la première. C'est cette  raisons qui en fait notre DNS secondaire.
 
 Comme précédemment, nous avons décidé, toujours dans un souci de sécurité et de facilité de maintenance, d'exécuter ce service dans un conteneur, lui-même dans une VM.
 
@@ -347,7 +347,7 @@ networks:
 
 ### GitLab
 
-Pour stocker nos différentes configurations, que ce soit les sauvegardes du pare-feu ou les fichiers docker-compose, nous avons mis en place un serveur GitLab. Comme les services précédents, il est conteneurisé et dispose de sa propre machine virtuelle (VM) avec une adresse IP dédiée pour l'aplication de ces services.
+Pour stocker nos différentes configurations, que ce soit les sauvegardes du pare-feu ou les fichiers docker-compose, nous avons mis en place un serveur GitLab. Comme les services précédents, il est conteneurisé et dispose de sa propre machine virtuelle (VM) avec une adresse IP dédiée pour l'application de ces services.
 
 Le serveur GitLab fonctionne avec trois services au total : Redis, une base de données PostgreSQL et l'application GitLab elle-même.
 
@@ -445,11 +445,11 @@ services:
   snipe-it:
     container_name: snipe-it
     image: snipe/snipe-it:latest
-    ports:                          # Port utiliser
+    ports:                          # Port utilisé
       - "80:80"
     depends_on:
       - snipe-mysql
-    mac_address: 02:42:c0:a8:84:48  # MAC du containre
+    mac_address: 02:42:c0:a8:84:48  # MAC du container
     networks:
       x_vlan:
         ipv4_address: 192.168.16.48 # IP du container
@@ -545,11 +545,11 @@ networks:
 
 ### HAproxy
 
-Pour realiser l'equilibrage de charge pour le wordpress nous avons mis en place un HAproxy ...
-
-Ce service gere donc les requette arrivance et les dispache sur les diferent service.
+Pour réaliser l'équilibrage de charges pour WordPress, nous avons mis en place un HAProxy. Ce service se charge de gérer les requêtes entrantes et de les répartir sur les différents services disponibles.
 
 Comme précédemment, ce service possède sa propre machine virtuelle (VM) et son adresse IP indépendante de la machine hôte.
+
+L'utilisation d'une machine virtuelle pour exécuter le HAProxy offre plusieurs avantages. Tout d'abord, cela permet d'isoler le service d'équilibrage de charges du reste de l'infrastructure, assurant ainsi une meilleure sécurité et une meilleure gestion des ressources. De plus, la scalabilité est facilitée, car il est possible d'ajuster les ressources allouées à la VM en fonction des besoins de charge.
 
 Voici un extrait commenté du fichier docker-compose :
 
@@ -560,7 +560,7 @@ services:
     image: haproxy:latest
     ports:                              # Port utiliser
       - 80:80
-    mac_address: 02:42:c0:a8:84:60      # MAC du containre
+    mac_address: 02:42:c0:a8:84:60      # MAC du container
     networks:
       x_vlan:
         ipv4_address: 192.168.16.60     # IP du container
@@ -582,7 +582,7 @@ Voici le guide d'installation que nous avons suivi : `scodoc.org/GuideInstallDeb
 
 ### FTP
 
-Le protocole FTP (File Transfer Protocol) est un protocole utilisé pour le transfert de fichiers entre un client et un serveur sur un réseau. Il nous permet d'envoyer, de récupérer et de gérer des fichiers sur un serveur distant que je vais devoir créer sous forme containerisée.
+Le protocole FTP (File Transfer Protocol) est un protocole utilisé pour le transfert de fichiers entre un client et un serveur sur un réseau. Il nous permet d'envoyer, de récupérer et de gérer des fichiers sur un serveur distant que je vais devoir créer sous forme containérisée.
 
 Voici le “docker-compose.yaml” qui va mettre en place un serveur FTP
 
@@ -719,31 +719,31 @@ En résumé, ce Docker Compose déploie une base de données MariaDB et une inst
 
 #### Vérification
 
-Pour vérifier que mon serveur marche, j’ouvre le navigateur et j’autorise l’adresse `http://moodle.g1.com/my/` , cela me dirige vers la page d’accueil de Moodle.
+Pour vérifier que notre serveur marche, on ouvre le navigateur et on autorise l’adresse `http://moodle.g1.com/my/` , cela nous dirige vers la page d’accueil de Moodle.
 
 ![img](img/17.png)
 
 ### Harbor
 
-Nous avons decidé d'utiliser des VM fedoras de part leur petite taille et leur efficacité.
+Nous avons décidé d'utiliser des VM fedoras de part leur petite taille et leur efficacité.
 
-Je commence ainsi par crée ma VM fedora avec 4 CPU, 8GB de memoire et 160 GB d'espace de stockage qui sont les performances recommandé par le site officiel.
+Nous commençons ainsi par créer la VM fedora avec 4 CPU, 8GB de mémoire et 160 GB d'espace de stockage qui sont les performances recommandées par le site officiel.
 
-J'ai decidé de suivre la procédure officiel indiquer par Harbor au lien suivant, `https://goharbor.io/docs/2.0.0/install-config/download-installer/`
+Nous avons décidé de suivre la procédure officielle indiquée par Harbor au lien suivant, `https://goharbor.io/docs/2.0.0/install-config/download-installer/`
 
-Ce qui me permet d'avoir une procédure stable et en plus sécurisé.
+Ce qui nous permet d'avoir une procédure stable et plus sécurisée.
 
-J'ai choisis la dernière version de Harbor disponible la V2.8.2 en passant par l'installateur offline qui prend plus de place mais permet d'avoir tous les fichier sur sa machine sans passer par le Docker HUB
+Nous avons choisi la dernière version de Harbor disponible la V2.8.2 en passant par l'installateur offline qui prend plus de place, mais qui permet d'avoir tous les fichier sur sa machine sans passer par le Docker HUB
 
 #### Installation
 
-Il est possible d'utiliser Harbor sans aucune sécurite en passant par un simple HTTP , or cela nous exposerais à différent type d'attaque comme le MAN in the middle.
-Dans un environement de production l'on va toujours préferé le HTTPS , Pour l'utiliser nous avons besoin de crée des Certificats SSL.
-Nous pouvons crée des Certificats qui son signé par des Trusted third-party CA ou alors signé nous meme nos certificats.
-Ici nous allons utiliser OpenSSL pour crée des CA et grace à ces CA  signer notre Server Certificate et le Client Certificate.
-Voici la procédure à suivre pour génerer ces clés `https://goharbor.io/docs/2.0.0/install-config/configure-https/`
+Il est possible d'utiliser Harbor sans aucune sécurité en passant par un simple HTTP , or, cela nous exposerait à différents types d'attaques comme le MAN in the Middle.
+Dans un environnement de production où l'on va toujours préférer le HTTPS , pour l'utiliser, nous avons besoin de créer des Certificats SSL.
+Nous pouvons créer des Certificats qui son signés par des Trusted third-party CA ou alors, signer nous même nos certificats.
+Ici nous allons utiliser OpenSSL pour crée des CA et grâce à ces CA  signer notre Server Certificate et le Client Certificate.
+Voici la procédure à suivre pour générer ces clés `https://goharbor.io/docs/2.0.0/install-config/configure-https/`
 
-Une fois nos differents certificats crée nous devons les donnée à docker et à Harbor.
+Une fois nos différents certificats créés, nous devons les donner à docker et à Harbor.
 
 ```bash
 cp harbor.g1.com.cert /etc/docker/certs.d/harbor.g1.com/
@@ -751,7 +751,7 @@ cp harbor.g1.com.key /etc/docker/certs.d/harbor.g1.com/
 cp ca.crt /etc/docker/certs.d/harbor.g1.com/
 ```
 
-Le ficher prepare permet d'activer le HTTPS , aprés avoir effectuer./prepare on peut composer notre docker.
+Le ficher prepare permet d'activer le HTTPS , après avoir effectuer./prepare on peut composer notre docker.
 
 N'oublions pas d'activer le insecure-registries pour permettre d'accéder au site , il est important de noter que l'utilisation de registres non sécurisés présente des risques potentiels pour la sécurité, car les connexions ne sont pas cryptées. Par conséquent, il est recommandé de ne pas utiliser les "insecure registries" dans des environnements de production ou lorsque la sécurité des données est une préoccupation importante.
 
@@ -764,11 +764,11 @@ Il faut crée le fichier etc/docker/daemon.json qui contiendra :
 }
 ```
 
-Grâce à notre DNS nous pouvons directement accèder à l'harbor avec son nom symbolique.
+Grâce à notre DNS nous pouvons directement accéder à l'harbor avec son nom symbolique.
 
 ![img](./img/harbor1.png)
 
-Voici notre dépots images appelé library :
+Voici notre dépot images appelé library :
 
 ![img](./img/harbor2.png)
 
@@ -794,32 +794,32 @@ docker pull harbor.g1.com/library/nginx
 
 ### Active directory
 
-Nous avons décidé de mettre en place un AD avec un WUDS afin de simplifier la gestions des différentes clients que ce soit d'un point de vu sécurité, gestion utilisateurs, mises a jours et permissions.
+Nous avons décidé de mettre en place un AD avec un WUDS afin de simplifier la gestions des différentes clients que ce soit d'un point de vue sécurité, gestion utilisateurs, mises a jours et permissions.
 
-La mise a jour d'un WUDS sur le serveur de l'AD nous permet de reduire la charge sur la bande passante de notre réseau en centralisant les mises a jours a partir de notre AD.
+La mise a jour d'un WUDS sur le serveur de l'AD nous permet de réduire la charge sur la bande passante de notre réseau en centralisant les mises a jours a partir de notre AD.
 
-Afin de simplifier la gestion des mots de passes nous avions décidé de mettre en place un GPO désactivant les prériquis de sécurité (ce qui n'est bien évidement pas a faire dans un enviromenent de production).
+Afin de simplifier la gestion des mots de passes nous avions décidé de mettre en place un GPO désactivant les prérequis de sécurité (ce qui n'est bien évidement pas a faire dans un environnement de production).
 
 ### Samba
 
-Afin de profiter pleinement de notre environement AD nous avons décider d'utiliser le partage de fichier natif a partir de notre serveur Windows afin de pouvoir gérer toutes les permission lié a celui-ci simplement et efficasement.
+Afin de profiter pleinement de notre environnement AD nous avons décider d'utiliser le partage de fichiers natifs à partir de notre serveur Windows afin de pouvoir gérer toutes les permission lié a celui-ci simplement et efficacement.
 
 ### Client windows
 
-Les clients windows sont des VM tourant sur Windows 11 (Afin de vérifier la possibilité d'installation sur VM), c'est clients sont tous lié à notre serveur AD qui se charge égalment de centraliser les dossier tel-que :
+Les clients windows sont des VM tournant sur Windows 11 (Afin de vérifier la possibilité d'installation sur VM), ces clients sont tous liés à notre serveur AD qui se charge également de centraliser les dossiers tels-que :
 
 - Documents
 - Images
 - Objets 3D
 - Etc...
 
-## Fonctionement
+## Fonctionnement
 
-Pour montrer le bon fonctionement de toute l'infrastructure voici une video de demonstration depuis des poste windows installer (via un bureau a distance)
+Pour montrer le bon fonctionnement de toute l'infrastructure, voici une video de démonstration depuis des poste windows installer (via un bureau a distance)
 
 [Demo](./img/demo.webm)
 
-(Si le lien ne fonctionne pas clique [ici](https://github.com/mathieu-iut-beziers/SAE4D01/blob/main/img/demo.webm) )
+(Si le lien ne fonctionne pas cliquez [ici](https://github.com/mathieu-iut-beziers/SAE4D01/blob/main/img/demo.webm) )
 
 ## Budgétisation
 
@@ -832,7 +832,7 @@ Résumé du budget prévisionnel :
 
 En fonction de ces informations, le budget prévisionnel total s'élève à 28 000 pour les serveurs, 2 000 pour le Stormshield SN210W, et les coûts de main-d'œuvre s'élèvent à 35 heures par semaine pendant 2 semaines, avec 4 personnes facturées à 280 de l'heure.
 
-## Gestion de proget
+## Gestion de projet
 
 Notre gestion de projet s'est basée sur deux éléments principaux : Jira et Google Sheets.
 
